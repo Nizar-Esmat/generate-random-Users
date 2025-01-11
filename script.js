@@ -1,15 +1,25 @@
-//  url: 'https://randomuser.me/api/'
 
-function fetchdata (){
-  showSpinner()
-  fetch("https://randomuser.me/api/")
-  .then((res) => res.json())
-  .then((data)=> {
-   console.log(data.results[0])
-   postdata(data.results[0])
-   hideSpinner()
- 
- } );
+function fetchdata() {
+  showSpinner(); 
+
+  fetch("https://randomuser.me/api/") 
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error("Something went wrong");
+      }
+      return res.json();
+    })
+    .then((data) => {
+      postdata(data.results[0]); 
+      hideSpinner(); 
+    })
+    .catch((err) => {
+      console.error(err); 
+      document.getElementById("user").innerHTML = `
+        <p class="text-red-500 text-center text-2xl">${err.message}</p>
+      `; 
+      hideSpinner(); 
+    });
 }
 
 
@@ -42,9 +52,9 @@ function createData(data){
                <span class="font-bold">Phone: </span> ${data.phone  }
              </p>
              <p class="text-xl">
-               <span class="font-bold">Location: </span> ${data.location.name}
+               <span class="font-bold">Location: </span> ${data.location.city}
              </p>
-             <p class="text-xl"><span class="font-bold">Age: </span> ${data.age}</p>
+             <p class="text-xl"><span class="font-bold">Age: </span> ${data.dob.age}</p>
            </div>
          </div>
        </div>
